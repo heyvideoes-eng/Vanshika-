@@ -1,0 +1,12 @@
+{
+  "name": "vanshika",
+  "version": "1.0.0",
+  "description": "Cinematic WebGL Landing Page",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
