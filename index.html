@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kylie Jenner vs Robin Sharma | Pop Culture vs Inner Power</title>
+    <meta name="description" content="Two icons. Two paths. One question. Explore the worlds of Kylie Jenner and Robin Sharma — pop-culture influence vs inner mastery.">
+    <meta property="og:title" content="Kylie Jenner vs Robin Sharma — Pop Culture vs Inner Power">
+    <meta property="og:description" content="Two icons. Two paths. Compare the world of beauty mogul Kylie Jenner with leadership guru Robin Sharma.">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#0D0E1A">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- GSAP + Plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* ============================================
+           DESIGN SYSTEM — CUSTOMIZABLE TOKENS
+           ============================================ */
+        :root {
+            /* Color Palette */
+            --color-primary: #6C3CE1;
+            --color-primary-glow: rgba(108, 60, 225, 0.4);
+            --color-secondary: #1A1B3A;
+            --color-accent: #E8A838;
+            --color-accent-glow: rgba(232, 168, 56, 0.3);
+            --color-kylie: #E84393;
+            --color-kylie-glow: rgba(232, 67, 147, 0.3);
+            --color-robin: #00B894;
+            --color-robin-glow: rgba(0, 184, 148, 0.3);
+            --color-bg-dark: #0D0E1A;
+            --color-bg-darker: #080910;
+            --color-bg-light: #F5F3EF;
+            --color-text: #EEEDEB;
+            --color-text-muted: rgba(238, 237, 235, 0.5);
+            --color-text-dim: rgba(238, 237, 235, 0.25);
+            --color-glass: rgba(255, 255, 255, 0.04);
+            --color-glass-border: rgba(255, 255, 255, 0.08);
+            --color-glass-hover: rgba(255, 255, 255, 0.08);
+
+            /* Typography */
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --fs-hero: clamp(3.5rem, 9vw, 8rem);
+            --fs-h2: clamp(2.5rem, 6vw, 5rem);
+            --fs-h3: clamp(1.3rem, 2.5vw, 1.75rem);
+            --fs-body: clamp(0.95rem, 1.2vw, 1.125rem);
+            --fs-small: 0.8rem;
+            --fs-label: 0.7rem;
+
+            /* Spacing */
+            --section-pad: clamp(5rem, 12vh, 10rem);
+            --container-max: 1280px;
+            --container-pad: clamp(1.5rem, 4vw, 3rem);
+
+            /* Animation */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+            --duration-fast: 0.3s;
+            --duration-med: 0.6s;
+            --duration-slow: 1.2s;
+
+            /* Borders */
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+        }
+
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: var(--fs-body);
+            color: var(--color-text);
+            background: var(--color-bg-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        ::selection {
+            background: var(--color-primary);
+            color: #fff;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; cursor: none; border: none; background: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+        ul, ol { list-style: none; }
+
+        /* ============================================
+           PRELOADER
+           ============================================ */
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: var(--color-bg-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            transition: opacity 0.6s var(--ease-out-expo), visibility 0.6s;
+        }
+
+        #loader.loaded {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--color-text);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .loader-bar-track {
+            width: 200px;
+            height: 2px;
+            background: var(--color-glass-border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loader-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-kylie), var(--color-robin));
+            border-radius: 2px;
+            transition: width 0.3s var(--ease-out-expo);
+        }
+
+        .loader-percent {
+            font-family: var(--font-display);
+            font-size: var(--fs-small);
+            color: var(--color-text-muted);
+            letter-spacing: 0.2em;
+        }
+
+        /* ============================================
+           CUSTOM CURSOR
+           ============================================ */
+        .cursor-dot {
+            position: fixed;
+            top: 0; left: 0;
+            width: 8px; height: 8px;
+            background: var(--color-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), background 0.3s;
+        }
+
+        .cursor-ring {
+            position: fixed;
+            top: 0; left: 0;
+            width: 40px; height: 40px;
+            border: 1px solid rgba(232, 168, 56, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s var(--ease-out-expo), height 0.4s var(--ease-out-expo), border-color 0.3s, opacity 0.3s;
+        }
+
+        .cursor-hover .cursor-dot {
+            width: 60px; height: 60px;
+            background: var(--color-primary-glow);
+            mix-blend-mode: normal;
+        }
+        .cursor-hover .cursor-ring {
+            width: 80px; height: 80px;
+            border-color: var(--color-primary);
+            opacity: 0.5;
+        }
+
+        /* ============================================
+           CANVAS (THREE.JS)
+           ============================================ */
+        #canvas-container {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #canvas-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* ============================================
+           HEADER / NAVIGATION
+           ============================================ */
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1.5rem var(--container-pad);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            mix-blend-mode: difference;
+            transition: padding 0.4s var(--ease-out-expo);
+        }
+
+        header.scrolled { padding: 1rem var(--container-pad); }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            font-family: var(--font-display);
+            font-size: var(--fs-small);
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            transition: color var(--duration-fast);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 1px;
+            background: var(--color-accent);
+            transition: width 0.4s var(--ease-out-expo);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width: 100%; }
+        .nav-links a:hover { color: #fff; }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            width: 28px;
+            padding: 4px 0;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block; width: 100%; height: 1.5px;
+            background: #fff;
+            transition: transform 0.4s var(--ease-out-expo), opacity 0.3s;
+            transform-origin: center;
+        }
+
+        .hamburger.active span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+        /* Fullscreen Menu */
+        .fullscreen-menu {
+            position: fixed; inset: 0;
+            z-index: 999;
+            background: var(--color-bg-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s var(--ease-out-expo), visibility 0.5s;
+        }
+
+        .fullscreen-menu.open { opacity: 1; visibility: visible; }
+
+        .fullscreen-menu a {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: var(--color-text);
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo), color 0.3s;
+        }
+
+        .fullscreen-menu.open a { opacity: 1; transform: translateY(0); }
+        .fullscreen-menu a:hover { color: var(--color-accent); }
+
+        .fullscreen-menu a:nth-child(1) { transition-delay: 0.1s; }
+        .fullscreen-menu a:nth-child(2) { transition-delay: 0.15s; }
+        .fullscreen-menu a:nth-child(3) { transition-delay: 0.2s; }
+        .fullscreen-menu a:nth-child(4) { transition-delay: 0.25s; }
+        .fullscreen-menu a:nth-child(5) { transition-delay: 0.3s; }
+        .fullscreen-menu a:nth-child(6) { transition-delay: 0.35s; }
+        .fullscreen-menu a:nth-child(7) { transition-delay: 0.4s; }
+
+        /* ============================================
+           LAYOUT UTILITY
+           ============================================ */
+        .container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 var(--container-pad);
+        }
+
+        section {
+            position: relative;
+            z-index: 1;
+            padding: var(--section-pad) 0;
+        }
+
+        .section-label {
+            font-family: var(--font-display);
+            font-size: var(--fs-label);
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 32px; height: 1px;
+            background: var(--color-accent);
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: var(--fs-h2);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-family: var(--font-display);
+            font-size: var(--fs-h3);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--color-kylie), var(--color-robin));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-gradient-kylie {
+            background: linear-gradient(135deg, var(--color-kylie), #fd79a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-gradient-robin {
+            background: linear-gradient(135deg, var(--color-robin), #55efc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-muted { color: var(--color-text-muted); }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            font-family: var(--font-display);
+            font-size: var(--fs-small);
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #fff;
+            background: linear-gradient(135deg, var(--color-primary), #8B5CF6);
+            border-radius: 100px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, #8B5CF6, var(--color-accent));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px var(--color-primary-glow);
+        }
+        .btn-primary:hover::before { opacity: 1; }
+
+        .btn-primary span { position: relative; z-index: 1; }
+        .btn-primary .btn-arrow {
+            position: relative; z-index: 1;
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+        .btn-primary:hover .btn-arrow { transform: translateX(4px); }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            font-family: var(--font-display);
+            font-size: var(--fs-small);
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-text);
+            border: 1px solid var(--color-glass-border);
+            border-radius: 100px;
+            transition: border-color 0.4s, background 0.4s, transform 0.4s var(--ease-out-expo);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--color-accent);
+            background: rgba(232, 168, 56, 0.05);
+            transform: translateY(-2px);
+        }
+
+        /* ============================================
+           §1 HERO
+           ============================================ */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 0;
+            padding-bottom: 0;
+            background: transparent;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 850px;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--font-display);
+            font-size: var(--fs-label);
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 2rem;
+            opacity: 0;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: var(--fs-hero);
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title .word {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: top;
+            padding-bottom: 0.1em;
+        }
+
+        .hero-title .word-inner {
+            display: inline-block;
+            transform: translateY(110%);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+            color: var(--color-text-muted);
+            max-width: 580px;
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hero-scroll-hint {
+            position: absolute;
+            bottom: 3rem;
+            left: var(--container-pad);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0;
+        }
+
+        .hero-scroll-hint span {
+            font-family: var(--font-display);
+            font-size: var(--fs-label);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-text-dim);
+            writing-mode: vertical-lr;
+        }
+
+        .scroll-line {
+            width: 1px; height: 60px;
+            background: var(--color-glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: -100%; left: 0;
+            width: 100%; height: 100%;
+            background: var(--color-accent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0% { top: -100%; }
+            50% { top: 100%; }
+            100% { top: 100%; }
+        }
+
+        /* VS badge styles */
+        .hero-vs-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .vs-name {
+            font-family: var(--font-display);
+            font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 0.5rem 1.25rem;
+            border-radius: 100px;
+            border: 1px solid;
+        }
+
+        .vs-name.kylie {
+            color: var(--color-kylie);
+            border-color: var(--color-kylie);
+            background: var(--color-kylie-glow);
+        }
+
+        .vs-name.robin {
+            color: var(--color-robin);
+            border-color: var(--color-robin);
+            background: var(--color-robin-glow);
+        }
+
+        .vs-divider {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--color-text-dim);
+        }
+
+        /* ============================================
+           §2 KYLIE PROFILE
+           ============================================ */
+        #kylie {
+            background: var(--color-bg-darker);
+        }
+
+        .section-label.kylie-label { color: var(--color-kylie); }
+        .section-label.kylie-label::before { background: var(--color-kylie); }
+        .section-label.robin-label { color: var(--color-robin); }
+        .section-label.robin-label::before { background: var(--color-robin); }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+            margin-top: 3rem;
+        }
+
+        .profile-text p {
+            margin-bottom: 1.5rem;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+        }
+
+        .profile-text p:first-of-type {
+            font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+            color: var(--color-text);
+        }
+
+        .fact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .fact-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 1.25rem 1.5rem;
+            background: var(--color-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--radius-md);
+            transition: border-color 0.4s, transform 0.4s var(--ease-out-expo);
+        }
+
+        .fact-item:hover {
+            transform: translateX(4px);
+        }
+
+        .fact-item.kylie-fact:hover { border-color: var(--color-kylie); }
+        .fact-item.robin-fact:hover { border-color: var(--color-robin); }
+
+        .fact-icon {
+            flex-shrink: 0;
+            width: 28px; height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.75rem;
+        }
+
+        .fact-icon.kylie-icon {
+            background: var(--color-kylie-glow);
+            color: var(--color-kylie);
+        }
+
+        .fact-icon.robin-icon {
+            background: var(--color-robin-glow);
+            color: var(--color-robin);
+        }
+
+        .fact-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .fact-content strong {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        /* ============================================
+           §3 ROBIN SHARMA PROFILE
+           ============================================ */
+        #robin {
+            background: var(--color-bg-dark);
+        }
+
+        /* ============================================
+           §4 TIMELINES
+           ============================================ */
+        #timeline {
+            background: var(--color-secondary);
+            overflow: hidden;
+        }
+
+        .timeline-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-tab {
+            padding: 0.75rem 2rem;
+            font-family: var(--font-display);
+            font-size: var(--fs-small);
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border-radius: 100px;
+            border: 1px solid var(--color-glass-border);
+            transition: all 0.4s var(--ease-out-expo);
+            cursor: pointer;
+        }
+
+        .timeline-tab:hover { background: var(--color-glass); }
+
+        .timeline-tab.active-kylie {
+            background: var(--color-kylie-glow);
+            border-color: var(--color-kylie);
+            color: var(--color-kylie);
+        }
+
+        .timeline-tab.active-robin {
+            background: var(--color-robin-glow);
+            border-color: var(--color-robin);
+            color: var(--color-robin);
+        }
+
+        .timeline-container {
+            position: relative;
+        }
+
+        .timeline-track {
+            display: none;
+        }
+
+        .timeline-track.active {
+            display: block;
+        }
+
+        .tl-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .tl-card {
+            padding: 2rem;
+            background: rgba(13, 14, 26, 0.6);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--radius-md);
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.5s, transform 0.5s var(--ease-out-expo);
+        }
+
+        .tl-card::after {
+            content: '';
+            position: absolute; inset: 0;
+            border-radius: var(--radius-md);
+            padding: 1px;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .tl-card.kylie-card::after {
+            background: linear-gradient(135deg, var(--color-kylie), #fd79a8);
+        }
+
+        .tl-card.robin-card::after {
+            background: linear-gradient(135deg, var(--color-robin), #55efc4);
+        }
+
+        .tl-card:hover { transform: translateY(-4px); }
+        .tl-card:hover::after { opacity: 1; }
+
+        .tl-year {
+            font-family: var(--font-display);
+            font-size: var(--fs-label);
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .tl-year.kylie-year { color: var(--color-kylie); }
+        .tl-year.robin-year { color: var(--color-robin); }
+
+        .tl-card h3 { margin-bottom: 0.5rem; }
+        .tl-card p { color: var(--color-text-muted); font-size: 0.9rem; line-height: 1.7; }
+
+        /* ============================================
+           §5 EMPIRES
+           ============================================ */
+        #empires {
+            background: var(--color-bg-dark);
+        }
+
+        .empires-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .empire-column h3 {
+            margin-bottom: 2rem;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+        }
+
+        .empire-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .empire-item {
+            padding: 1.5rem;
+            background: var(--color-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--radius-md);
+            transition: border-color 0.4s, transform 0.4s var(--ease-out-expo);
+        }
+
+        .empire-item:hover { transform: translateY(-3px); }
+        .empire-item.kylie-item:hover { border-color: var(--color-kylie); }
+        .empire-item.robin-item:hover { border-color: var(--color-robin); }
+
+        .empire-item h4 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .empire-item p {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            line-height: 1.7;
+        }
+
+        .empire-divider {
+            width: 1px;
+            background: linear-gradient(180deg, transparent, var(--color-glass-border), var(--color-glass-border), transparent);
+        }
+
+        /* ============================================
+           §6 COMPARISON
+           ============================================ */
+        #comparison {
+            background: var(--color-bg-darker);
+        }
+
+        .comparison-table {
+            margin-top: 3rem;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .comparison-table thead th {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: left;
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid var(--color-glass-border);
+        }
+
+        .comparison-table thead th:nth-child(2) { color: var(--color-kylie); }
+        .comparison-table thead th:nth-child(3) { color: var(--color-robin); }
+
+        .comparison-table tbody td {
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid var(--color-glass-border);
+            vertical-align: top;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .comparison-table tbody td:first-child {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--color-accent);
+            white-space: nowrap;
+        }
+
+        .comparison-table tbody td:nth-child(2) { color: var(--color-text-muted); }
+        .comparison-table tbody td:nth-child(3) { color: var(--color-text-muted); }
+
+        .comparison-table tbody tr {
+            transition: background 0.3s;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--color-glass);
+        }
+
+        /* Mobile comparison cards */
+        .comparison-cards-mobile {
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .comp-card-mobile {
+            padding: 2rem;
+            background: var(--color-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--radius-md);
+        }
+
+        .comp-card-mobile h4 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .comp-card-mobile .comp-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .comp-card-mobile .comp-row:last-child { margin-bottom: 0; }
+
+        .comp-label-k, .comp-label-r {
+            font-size: var(--fs-label);
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .comp-label-k { color: var(--color-kylie); }
+        .comp-label-r { color: var(--color-robin); }
+
+        /* ============================================
+           §7 CONTROVERSIES / IMPACT
+           ============================================ */
+        #controversies {
+            background: var(--color-bg-dark);
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 3rem auto 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--color-glass-border);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.75rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            text-align: left;
+            font-family: var(--font-display);
+            font-size: var(--fs-h3);
+            font-weight: 600;
+            color: var(--color-text);
+            transition: color 0.3s;
+        }
+
+        .faq-question:hover { color: var(--color-accent); }
+
+        .faq-icon {
+            flex-shrink: 0;
+            width: 32px; height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--color-glass-border);
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: transform 0.4s var(--ease-out-expo), border-color 0.3s, background 0.3s;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(45deg);
+            border-color: var(--color-accent);
+            background: rgba(232, 168, 56, 0.1);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s var(--ease-out-expo), padding 0.5s;
+        }
+
+        .faq-item.open .faq-answer { padding-bottom: 1.75rem; }
+
+        .faq-answer p {
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        /* ============================================
+           §8 FINAL CTA
+           ============================================ */
+        #final-cta {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            background: var(--color-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta-bg {
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, var(--color-kylie-glow), transparent 50%),
+                        radial-gradient(ellipse at 70% 50%, var(--color-robin-glow), transparent 50%);
+            opacity: 0.25;
+        }
+
+        .final-cta-content {
+            text-align: center;
+            max-width: 750px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .final-cta-content h2 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .final-cta-content p {
+            font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+            color: var(--color-text-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .cta-dual {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-dual .btn-primary { background: linear-gradient(135deg, var(--color-kylie), #fd79a8); }
+        .cta-dual .btn-outline { border-color: var(--color-robin); color: var(--color-robin); }
+        .cta-dual .btn-outline:hover { background: var(--color-robin-glow); border-color: var(--color-robin); }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            padding: 4rem 0 2rem;
+            background: var(--color-bg-darker);
+            border-top: 1px solid var(--color-glass-border);
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-brand { max-width: 320px; }
+
+        .footer-brand .nav-logo {
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .footer-brand p {
+            font-size: var(--fs-small);
+            color: var(--color-text-muted);
+            line-height: 1.7;
+        }
+
+        .footer-links-group {
+            display: flex;
+            gap: 4rem;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-display);
+            font-size: var(--fs-label);
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-col a {
+            display: block;
+            font-size: var(--fs-small);
+            color: var(--color-text-dim);
+            margin-bottom: 0.75rem;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover { color: var(--color-accent); }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-glass-border);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            font-size: var(--fs-small);
+            color: var(--color-text-dim);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-social a {
+            width: 36px; height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--color-glass-border);
+            border-radius: 50%;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            transition: border-color 0.3s, color 0.3s, transform 0.4s var(--ease-out-expo);
+        }
+
+        .footer-social a:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            transform: translateY(-2px);
+        }
+
+        /* ============================================
+           IMPACT STATS ROW
+           ============================================ */
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .impact-stat {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: var(--color-glass);
+            border: 1px solid var(--color-glass-border);
+            border-radius: var(--radius-md);
+            transition: border-color 0.4s, transform 0.4s var(--ease-out-expo);
+        }
+
+        .impact-stat:hover { transform: translateY(-4px); }
+        .impact-stat:nth-child(odd):hover { border-color: var(--color-kylie); }
+        .impact-stat:nth-child(even):hover { border-color: var(--color-robin); }
+
+        .impact-number {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .impact-number.kylie-num {
+            background: linear-gradient(135deg, var(--color-kylie), #fd79a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .impact-number.robin-num {
+            background: linear-gradient(135deg, var(--color-robin), #55efc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .impact-desc {
+            font-size: var(--fs-small);
+            color: var(--color-text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* ============================================
+           FOCUS STYLES
+           ============================================ */
+        :focus-visible {
+            outline: 2px solid var(--color-accent);
+            outline-offset: 4px;
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .profile-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .empires-split { grid-template-columns: 1fr; }
+            .empire-divider { display: none; }
+            .tl-grid { grid-template-columns: 1fr; }
+            .impact-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+
+            .comparison-table { display: none; }
+            .comparison-cards-mobile { display: flex; }
+
+            body { cursor: auto; }
+            .cursor-dot, .cursor-ring { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-cta-group { flex-direction: column; }
+            .hero-cta-group .btn-primary,
+            .hero-cta-group .btn-outline { width: 100%; justify-content: center; }
+            .impact-stats { grid-template-columns: 1fr; }
+            .timeline-tabs { flex-direction: column; }
+            .cta-dual { flex-direction: column; align-items: center; }
+            .footer-links-group { flex-direction: column; gap: 2rem; }
+            .hero-vs-badge { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+        }
+
+        /* ============================================
+           REDUCED MOTION
+           ============================================ */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .scroll-line::after { animation: none; }
+        }
+
+        /* ============================================
+           SCROLL REVEAL HELPERS
+           ============================================ */
+        .reveal { opacity: 0; transform: translateY(40px); }
+        .reveal-left { opacity: 0; transform: translateX(-40px); }
+        .reveal-right { opacity: 0; transform: translateX(40px); }
+        .reveal-scale { opacity: 0; transform: scale(0.85); }
+    </style>
+</head>
+<body>
+
+    <!-- PRELOADER -->
+    <div id="loader" role="status" aria-label="Loading page">
+        <div class="loader-logo">DIVINE</div>
+        <div class="loader-bar-track">
+            <div class="loader-bar-fill" id="loader-fill"></div>
+        </div>
+        <div class="loader-percent" id="loader-percent">0%</div>
+    </div>
+
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+    <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+
+    <!-- THREE.JS CANVAS -->
+    <div id="canvas-container" aria-hidden="true"></div>
+
+    <!-- FULLSCREEN MENU -->
+    <nav class="fullscreen-menu" id="fullscreen-menu" aria-label="Full screen navigation" role="dialog" aria-hidden="true">
+        <a href="#hero" class="menu-link">Home</a>
+        <a href="#kylie" class="menu-link">Kylie Jenner</a>
+        <a href="#robin" class="menu-link">Robin Sharma</a>
+        <a href="#timeline" class="menu-link">Timeline</a>
+        <a href="#empires" class="menu-link">Empires</a>
+        <a href="#comparison" class="menu-link">Compare</a>
+        <a href="#controversies" class="menu-link">Controversies</a>
+    </nav>
+
+    <!-- HEADER -->
+    <header id="site-header">
+        <a href="#hero" class="nav-logo" aria-label="Divine — go to homepage">DIVINE</a>
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="#kylie" data-nav="kylie">Kylie</a>
+            <a href="#robin" data-nav="robin">Robin</a>
+            <a href="#timeline" data-nav="timeline">Timeline</a>
+            <a href="#empires" data-nav="empires">Empires</a>
+            <a href="#comparison" data-nav="comparison">Compare</a>
+        </nav>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- §1 HERO -->
+        <section id="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-eyebrow">Two Icons — One Question</div>
+                    <h1 class="hero-title" aria-label="Pop Culture vs Inner Power">
+                        <span class="word"><span class="word-inner">Pop Culture</span></span>
+                        <br>
+                        <span class="word"><span class="word-inner">vs</span></span>
+                        <span class="word"><span class="word-inner text-gradient">Inner Power</span></span>
+                    </h1>
+                    <div class="hero-vs-badge">
+                        <span class="vs-name kylie">Kylie Jenner</span>
+                        <span class="vs-divider">×</span>
+                        <span class="vs-name robin">Robin Sharma</span>
+                    </div>
+                    <p class="hero-subtitle">One built a billion-dollar beauty empire from reality TV and Instagram. The other transformed millions of lives through books and ideas. Two radically different paths to global influence.</p>
+                    <div class="hero-cta-group">
+                        <a href="#kylie" class="btn-primary" id="hero-cta-primary">
+                            <span>Explore Their Stories</span>
+                            <svg class="btn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
+                        <a href="#comparison" class="btn-outline" id="hero-cta-secondary">
+                            <span>See the Comparison</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-scroll-hint" aria-hidden="true">
+                <span>Scroll</span>
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+
+        <!-- §2 KYLIE JENNER -->
+        <section id="kylie">
+            <div class="container">
+                <div class="section-label kylie-label reveal">The Beauty Mogul</div>
+                <h2 class="reveal">Kylie Jenner<br><span class="text-gradient-kylie">From Reality TV to Empire</span></h2>
+                <div class="profile-grid">
+                    <div class="profile-text">
+                        <p class="reveal">Kylie Jenner is an American media personality, beauty entrepreneur, and socialite best known for starring in "Keeping Up with the Kardashians" and founding Kylie Cosmetics.</p>
+                        <p class="reveal">Starting as a teenager on reality TV, she transformed her fame into a global beauty brand and one of the most influential social-media presences in the world. She is among the most-followed women on Instagram, turning her feed into a powerful marketing channel for her brands and personal image.</p>
+                        <p class="reveal">Frequently credited with driving trends in lip makeup, contouring, and Gen Z beauty branding, Kylie is known for leveraging scarcity, influencer marketing, and direct-to-consumer drops to sell out products within minutes.</p>
+                    </div>
+                    <div class="fact-list">
+                        <div class="fact-item kylie-fact reveal-right">
+                            <div class="fact-icon kylie-icon">✦</div>
+                            <div class="fact-content"><strong>Full Name:</strong> Kylie Kristen Jenner</div>
+                        </div>
+                        <div class="fact-item kylie-fact reveal-right">
+                            <div class="fact-icon kylie-icon">✦</div>
+                            <div class="fact-content"><strong>Born:</strong> 10 August 1997, Los Angeles, California, USA</div>
+                        </div>
+                        <div class="fact-item kylie-fact reveal-right">
+                            <div class="fact-icon kylie-icon">✦</div>
+                            <div class="fact-content"><strong>Family:</strong> Youngest daughter of Kris Jenner and Caitlyn Jenner; half-sister to Kourtney, Kim, Khloé, and Rob Kardashian; sister to Kendall Jenner</div>
+                        </div>
+                        <div class="fact-item kylie-fact reveal-right">
+                            <div class="fact-icon kylie-icon">✦</div>
+                            <div class="fact-content"><strong>Known For:</strong> Reality TV star, founder of Kylie Cosmetics, fashion and beauty influencer</div>
+                        </div>
+                        <div class="fact-item kylie-fact reveal-right">
+                            <div class="fact-icon kylie-icon">✦</div>
+                            <div class="fact-content"><strong>First TV:</strong> "Keeping Up with the Kardashians" (E!, 2007–2021) and later "The Kardashians" on Hulu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- §3 ROBIN SHARMA -->
+        <section id="robin">
+            <div class="container">
+                <div class="section-label robin-label reveal">The Leadership Guru</div>
+                <h2 class="reveal">Robin Sharma<br><span class="text-gradient-robin">From Lawyer to Legend</span></h2>
+                <div class="profile-grid">
+                    <div class="profile-text">
+                        <p class="reveal">Robin Sharma is a Canadian writer, leadership expert, and motivational speaker best known for "The Monk Who Sold His Ferrari" and "The 5AM Club".</p>
+                        <p class="reveal">A former litigation lawyer, he left the legal profession to pursue writing and personal development. He built a global brand around personal mastery, peak performance, and leadership without a formal title — coaching Fortune 100 companies, billionaire entrepreneurs, elite athletes, and public figures.</p>
+                        <p class="reveal">His signature ideas — that you don't need a title to lead, that early-morning discipline creates a competitive edge, and that true leaders embrace discomfort — have shaped how millions of people think, lead, and structure their lives worldwide.</p>
+                    </div>
+                    <div class="fact-list">
+                        <div class="fact-item robin-fact reveal-right">
+                            <div class="fact-icon robin-icon">✦</div>
+                            <div class="fact-content"><strong>Profession:</strong> Author, leadership coach, keynote speaker</div>
+                        </div>
+                        <div class="fact-item robin-fact reveal-right">
+                            <div class="fact-icon robin-icon">✦</div>
+                            <div class="fact-content"><strong>Background:</strong> Trained and worked as a litigation lawyer before self-publishing his first books</div>
+                        </div>
+                        <div class="fact-item robin-fact reveal-right">
+                            <div class="fact-icon robin-icon">✦</div>
+                            <div class="fact-content"><strong>Known For:</strong> Inspirational fables and frameworks blending spirituality, productivity, and leadership</div>
+                        </div>
+                        <div class="fact-item robin-fact reveal-right">
+                            <div class="fact-icon robin-icon">✦</div>
+                            <div class="fact-content"><strong>Company:</strong> Founder of Sharma Leadership International, advising leaders and organizations worldwide</div>
+                        </div>
+                        <div class="fact-item robin-fact reveal-right">
+                            <div class="fact-icon robin-icon">✦</div>
+                            <div class="fact-content"><strong>Clients:</strong> Fortune 100 companies, billionaire entrepreneurs, elite athletes, and public figures</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- §4 TIMELINES -->
+        <section id="timeline">
+            <div class="container">
+                <div class="section-label reveal">The Journey</div>
+                <h2 class="reveal">Two Paths.<br><span class="text-gradient">One Decade at a Time.</span></h2>
+                <div class="timeline-tabs reveal">
+                    <button class="timeline-tab active-kylie" data-tab="kylie-timeline" id="tab-kylie" aria-pressed="true">Kylie's Timeline</button>
+                    <button class="timeline-tab" data-tab="robin-timeline" id="tab-robin" aria-pressed="false">Robin's Timeline</button>
+                </div>
+                <div class="timeline-container">
+                    <!-- Kylie Timeline -->
+                    <div class="timeline-track active" id="kylie-timeline">
+                        <div class="tl-grid">
+                            <div class="tl-card kylie-card reveal-scale">
+                                <div class="tl-year kylie-year">2007</div>
+                                <h3>Breakthrough</h3>
+                                <p>Appears on "Keeping Up with the Kardashians" at age 9, becoming part of one of TV's most-watched reality families.</p>
+                            </div>
+                            <div class="tl-card kylie-card reveal-scale">
+                                <div class="tl-year kylie-year">2012</div>
+                                <h3>Fashion Collab</h3>
+                                <p>Launches the "Kendall & Kylie" clothing line with sister Kendall via PacSun, expanding her presence into fashion.</p>
+                            </div>
+                            <div class="tl-card kylie-card reveal-scale">
+                                <div class="tl-year kylie-year">2015</div>
+                                <h3>Kylie Lip Kits</h3>
+                                <p>Invests around $250,000 of her own savings to create Kylie Lip Kits, which quickly sell out and build massive hype online.</p>
+                            </div>
+                            <div class="tl-card kylie-card reveal-scale">
+                                <div class="tl-year kylie-year">2016</div>
+                                <h3>Kylie Cosmetics</h3>
+                                <p>Rebrands her lip kits into Kylie Cosmetics and begins releasing full collections, turning the line into a fast-growing beauty company.</p>
+                            </div>
+                            <div class="tl-card kylie-card reveal-scale">
+                                <div class="tl-year kylie-year">2018–2019</div>
+                                <h3>Billionaire Headlines</h3>
+                                <p>Forbes names her the world's youngest "self-made" billionaire after rapid growth of Kylie Cosmetics, sparking global debate.</p>
+                            </div>
+                            <div class="tl-card kylie-card reveal-scale">
+                                <div class="tl-year kylie-year">2019</div>
+                                <h3>Coty Deal</h3>
+                                <p>Sells 51% of Kylie Cosmetics to Coty Inc. in a deal valuing the brand around $1.2 billion, securing a huge payout and strategic partner.</p>
+                            </div>
+                            <div class="tl-card kylie-card reveal-scale">
+                                <div class="tl-year kylie-year">2021+</div>
+                                <h3>New Ventures</h3>
+                                <p>Expands into Kylie Skin, Kylie Baby, Kylie Swim and appears on Hulu's "The Kardashians" with her family.</p>
+                            </div>
+                            <div class="tl-card kylie-card reveal-scale">
+                                <div class="tl-year kylie-year">2025–2026</div>
+                                <h3>10-Year Brand Moment</h3>
+                                <p>Celebrates a decade of Kylie Cosmetics while addressing criticism about the brand's rapid rise and her billionaire status.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Robin Timeline -->
+                    <div class="timeline-track" id="robin-timeline">
+                        <div class="tl-grid">
+                            <div class="tl-card robin-card reveal-scale">
+                                <div class="tl-year robin-year">Early Career</div>
+                                <h3>Law Practice</h3>
+                                <p>Works as a litigation lawyer but feels unfulfilled, leading him to explore writing and personal development.</p>
+                            </div>
+                            <div class="tl-card robin-card reveal-scale">
+                                <div class="tl-year robin-year">1994</div>
+                                <h3>First Book</h3>
+                                <p>Self-publishes "MegaLiving", a book on stress management and spirituality, while still working as a lawyer.</p>
+                            </div>
+                            <div class="tl-card robin-card reveal-scale">
+                                <div class="tl-year robin-year">1997</div>
+                                <h3>Breakthrough Fable</h3>
+                                <p>Self-publishes "The Monk Who Sold His Ferrari", a story about a high-powered lawyer seeking a more meaningful life.</p>
+                            </div>
+                            <div class="tl-card robin-card reveal-scale">
+                                <div class="tl-year robin-year">Late 1990s</div>
+                                <h3>Major Publisher</h3>
+                                <p>HarperCollins picks up "The Monk Who Sold His Ferrari", helping the book reach readers around the world.</p>
+                            </div>
+                            <div class="tl-card robin-card reveal-scale">
+                                <div class="tl-year robin-year">2000s–2010s</div>
+                                <h3>Global Brand</h3>
+                                <p>Expands the "Monk" series, publishes additional titles, and delivers keynotes for organizations, CEOs, and top performers.</p>
+                            </div>
+                            <div class="tl-card robin-card reveal-scale">
+                                <div class="tl-year robin-year">2018</div>
+                                <h3>The 5AM Club</h3>
+                                <p>Releases "The 5AM Club: Own Your Morning, Elevate Your Life", popularizing the idea of a structured early-morning routine.</p>
+                            </div>
+                            <div class="tl-card robin-card reveal-scale">
+                                <div class="tl-year robin-year">2020s</div>
+                                <h3>Digital Evolution</h3>
+                                <p>Builds digital courses, publishes leadership "rules" and masterclasses, and continues speaking worldwide.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- §5 EMPIRES — BUSINESSES & BOOKS -->
+        <section id="empires">
+            <div class="container">
+                <div class="section-label reveal">The Empires</div>
+                <h2 class="reveal">Brands & Beauty<br><span class="text-gradient">vs Books & Ideas</span></h2>
+                <div class="empires-split">
+                    <!-- Kylie's Businesses -->
+                    <div class="empire-column">
+                        <h3 class="text-gradient-kylie reveal">Kylie's Businesses</h3>
+                        <div class="empire-list">
+                            <div class="empire-item kylie-item reveal">
+                                <h4>Kylie Cosmetics</h4>
+                                <p>Color cosmetics brand built from viral lip kits into full face products; known for limited drops, collaborations, and social-first marketing.</p>
+                            </div>
+                            <div class="empire-item kylie-item reveal">
+                                <h4>Kylie Skin</h4>
+                                <p>Skincare line offering cleansers, moisturizers, and treatments positioned as simple, step-based routines.</p>
+                            </div>
+                            <div class="empire-item kylie-item reveal">
+                                <h4>Kylie Baby</h4>
+                                <p>Baby-care and accessories brand inspired by her experience as a mother.</p>
+                            </div>
+                            <div class="empire-item kylie-item reveal">
+                                <h4>Kylie Swim</h4>
+                                <p>Swimwear line known for bold designs and controversial early reviews about fit and quality.</p>
+                            </div>
+                            <div class="empire-item kylie-item reveal">
+                                <h4>Kendall + Kylie</h4>
+                                <p>Fashion line co-created with Kendall Jenner, including clothing and accessories.</p>
+                            </div>
+                            <div class="empire-item kylie-item reveal">
+                                <h4>Other Projects</h4>
+                                <p>Mobile app "Kendall & Kylie", a co-written YA sci-fi novel, and collaborations with multiple fashion labels.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Robin's Books & Ideas -->
+                    <div class="empire-column">
+                        <h3 class="text-gradient-robin reveal">Robin's Books & Ideas</h3>
+                        <div class="empire-list">
+                            <div class="empire-item robin-item reveal">
+                                <h4>The Monk Who Sold His Ferrari</h4>
+                                <p>A fable about purpose, discipline, and inner peace that became a worldwide bestseller translated into dozens of languages.</p>
+                            </div>
+                            <div class="empire-item robin-item reveal">
+                                <h4>The 5AM Club</h4>
+                                <p>Advocates waking up early to follow a deliberate morning routine for mindset, health, and skills — millions of copies sold.</p>
+                            </div>
+                            <div class="empire-item robin-item reveal">
+                                <h4>Monk Series & More</h4>
+                                <p>Follow-ups in the Monk series and books on leadership and greatness, contributing to millions of copies sold in dozens of countries.</p>
+                            </div>
+                            <div class="empire-item robin-item reveal">
+                                <h4>Leadership Without Title</h4>
+                                <p>You do not need a formal title to lead; leadership is about influence, service, and character.</p>
+                            </div>
+                            <div class="empire-item robin-item reveal">
+                                <h4>Morning Mastery</h4>
+                                <p>Early-morning discipline creates a competitive edge in focus, learning, and emotional resilience.</p>
+                            </div>
+                            <div class="empire-item robin-item reveal">
+                                <h4>Sharma Leadership International</h4>
+                                <p>Keynote talks and seminars focused on building strong cultures, high-performance habits, and "world-class" standards.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Impact Stats -->
+                <div class="impact-stats" style="margin-top: 5rem;">
+                    <div class="impact-stat reveal-scale">
+                        <div class="impact-number kylie-num">$1.2B</div>
+                        <div class="impact-desc">Kylie Cosmetics valuation at Coty deal</div>
+                    </div>
+                    <div class="impact-stat reveal-scale">
+                        <div class="impact-number robin-num">15M+</div>
+                        <div class="impact-desc">Copies of Robin's books sold worldwide</div>
+                    </div>
+                    <div class="impact-stat reveal-scale">
+                        <div class="impact-number kylie-num">400M+</div>
+                        <div class="impact-desc">Kylie's social media followers</div>
+                    </div>
+                    <div class="impact-stat reveal-scale">
+                        <div class="impact-number robin-num">96+</div>
+                        <div class="impact-desc">Countries where Robin's books are published</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- §6 COMPARISON -->
+        <section id="comparison">
+            <div class="container">
+                <div class="section-label reveal">Side by Side</div>
+                <h2 class="reveal">The<br><span class="text-gradient">Comparison</span></h2>
+
+                <!-- Desktop table -->
+                <table class="comparison-table reveal">
+                    <thead>
+                        <tr>
+                            <th>Dimension</th>
+                            <th>Kylie Jenner</th>
+                            <th>Robin Sharma</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Influence Type</td>
+                            <td>Pop-culture influence — fame built on reality TV, fashion, and social media, monetized through beauty and lifestyle brands</td>
+                            <td>Inner influence — impact built on books, ideas, and coaching that shape how people think, lead, and structure their lives</td>
+                        </tr>
+                        <tr>
+                            <td>Main Platforms</td>
+                            <td>Visual and social — TV, Instagram, TikTok, YouTube</td>
+                            <td>Narrative and educational — books, speeches, online programs, digital courses</td>
+                        </tr>
+                        <tr>
+                            <td>Revenue Model</td>
+                            <td>Product sales, brand deals, sponsored posts, licensing</td>
+                            <td>Book royalties, keynote speaking, coaching programs, digital courses</td>
+                        </tr>
+                        <tr>
+                            <td>Audience</td>
+                            <td>Gen Z & Millennial consumers, beauty and fashion enthusiasts</td>
+                            <td>Executives, entrepreneurs, high-performers, seekers of personal growth</td>
+                        </tr>
+                        <tr>
+                            <td>Brand Strategy</td>
+                            <td>Scarcity drops, influencer marketing, social-first virality</td>
+                            <td>Books as credibility engines, keynote fees, long-term thought leadership</td>
+                        </tr>
+                        <tr>
+                            <td>Legacy Focus</td>
+                            <td>Beauty empire, cultural trendsetter, family brand dynasty</td>
+                            <td>Transforming global mindsets, leadership philosophy, personal mastery</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Mobile cards -->
+                <div class="comparison-cards-mobile">
+                    <div class="comp-card-mobile reveal">
+                        <h4>Influence Type</h4>
+                        <div class="comp-row">
+                            <span class="comp-label-k">Kylie</span>
+                            <p class="text-muted">Pop-culture influence — fame built on reality TV, fashion, and social media</p>
+                        </div>
+                        <div class="comp-row">
+                            <span class="comp-label-r">Robin</span>
+                            <p class="text-muted">Inner influence — impact built on books, ideas, and coaching</p>
+                        </div>
+                    </div>
+                    <div class="comp-card-mobile reveal">
+                        <h4>Main Platforms</h4>
+                        <div class="comp-row">
+                            <span class="comp-label-k">Kylie</span>
+                            <p class="text-muted">Visual & social — TV, Instagram, TikTok</p>
+                        </div>
+                        <div class="comp-row">
+                            <span class="comp-label-r">Robin</span>
+                            <p class="text-muted">Narrative & educational — books, speeches, courses</p>
+                        </div>
+                    </div>
+                    <div class="comp-card-mobile reveal">
+                        <h4>Revenue Model</h4>
+                        <div class="comp-row">
+                            <span class="comp-label-k">Kylie</span>
+                            <p class="text-muted">Product sales, brand deals, sponsored posts, licensing</p>
+                        </div>
+                        <div class="comp-row">
+                            <span class="comp-label-r">Robin</span>
+                            <p class="text-muted">Book royalties, keynote speaking, coaching programs</p>
+                        </div>
+                    </div>
+                    <div class="comp-card-mobile reveal">
+                        <h4>Audience</h4>
+                        <div class="comp-row">
+                            <span class="comp-label-k">Kylie</span>
+                            <p class="text-muted">Gen Z & Millennials, beauty enthusiasts</p>
+                        </div>
+                        <div class="comp-row">
+                            <span class="comp-label-r">Robin</span>
+                            <p class="text-muted">Executives, entrepreneurs, seekers of growth</p>
+                        </div>
+                    </div>
+                    <div class="comp-card-mobile reveal">
+                        <h4>Legacy Focus</h4>
+                        <div class="comp-row">
+                            <span class="comp-label-k">Kylie</span>
+                            <p class="text-muted">Beauty empire, cultural trendsetter, family brand dynasty</p>
+                        </div>
+                        <div class="comp-row">
+                            <span class="comp-label-r">Robin</span>
+                            <p class="text-muted">Transforming global mindsets, leadership philosophy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- §7 CONTROVERSIES & DEEPER QUESTIONS -->
+        <section id="controversies">
+            <div class="container">
+                <div class="section-label reveal">Deeper Questions</div>
+                <h2 class="reveal" style="text-align:center;">Controversies &<br><span class="text-gradient">Critical Lens</span></h2>
+                <div class="faq-list">
+                    <div class="faq-item reveal" id="faq-1">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
+                            <span>The "Self-Made" Debate</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-1" role="region">
+                            <p>Kylie's Forbes "youngest self-made billionaire" title triggered widespread criticism about the meaning of "self-made", given her family background, existing platform, and access to resources most entrepreneurs could never dream of. While she did invest her own savings and build a brand, critics argue the Kardashian-Jenner machine provided an insurmountable head start.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal" id="faq-2">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
+                            <span>Valuation Questions</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-2" role="region">
+                            <p>Later reporting suggested Kylie and her team may have provided inflated revenue figures, leading Forbes to revise and ultimately remove her billionaire status. This raised broader questions about celebrity brand valuations, media complicity, and the blurry line between perception and reality in the influencer economy.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal" id="faq-3">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
+                            <span>Labor & Manufacturing Criticism</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-3" role="region">
+                            <p>Campaigners questioned working conditions and payments connected to manufacturers linked to the Kendall + Kylie line, prompting public pressure for clarification. This highlighted the tension between celebrity brand glamour and the supply chain realities behind the products.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal" id="faq-4">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
+                            <span>Product Quality Disputes</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-4" role="region">
+                            <p>Kylie Swim and some cosmetic launches faced online complaints about quality and fit, which became widely discussed on social platforms. These episodes tested whether Kylie's brand loyalty could withstand scrutiny when the product didn't match the marketing promise.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal" id="faq-5">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">
+                            <span>Can Ideas Scale Like Products?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-5" role="region">
+                            <p>Robin Sharma's influence is immense but harder to quantify. While Kylie's empire is measured in revenue and valuations, Robin's impact lives in the habits, decisions, and leadership philosophies adopted by millions of readers. His work raises the question: which type of influence creates more lasting change — products that sit on a shelf, or ideas that reshape a life?</p>
+                        </div>
+                    </div>
+                    <div class="faq-item reveal" id="faq-6">
+                        <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-6">
+                            <span>Visibility vs Depth</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-6" role="region">
+                            <p>Kylie's influence operates through visibility — being seen, trending, and dominating feeds. Robin's works through depth — being read, reflected upon, and applied. Both models create real-world impact, but through fundamentally different mechanisms. The question isn't which is better, but what kind of influence we value most in the 21st century.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- §8 FINAL CTA -->
+        <section id="final-cta">
+            <div class="final-cta-bg" aria-hidden="true"></div>
+            <div class="container">
+                <div class="final-cta-content">
+                    <div class="section-label reveal" style="justify-content: center;">The Takeaway</div>
+                    <h2 class="reveal">Two Icons.<br><span class="text-gradient">One Infinite Question.</span></h2>
+                    <p class="reveal">Kylie Jenner proved that social media and cultural instinct can build a billion-dollar empire. Robin Sharma proved that ideas, discipline, and character can transform millions of lives. The real question isn't who's greater — it's what kind of impact you want to create.</p>
+                    <div class="cta-dual reveal">
+                        <a href="#kylie" class="btn-primary" id="cta-kylie">
+                            <span>Explore Kylie</span>
+                            <svg class="btn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </a>
+                        <a href="#robin" class="btn-outline" id="cta-robin">
+                            <span>Explore Robin</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <span class="nav-logo">DIVINE</span>
+                    <p>An editorial exploration of two radically different paths to global influence — pop culture vs inner power, products vs ideas, visibility vs depth.</p>
+                </div>
+                <div class="footer-links-group">
+                    <div class="footer-col">
+                        <h4>Profiles</h4>
+                        <a href="#kylie">Kylie Jenner</a>
+                        <a href="#robin">Robin Sharma</a>
+                        <a href="#comparison">Compare</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Explore</h4>
+                        <a href="#timeline">Timeline</a>
+                        <a href="#empires">Empires</a>
+                        <a href="#controversies">Controversies</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Sources</h4>
+                        <a href="https://en.wikipedia.org/wiki/Kylie_Jenner" target="_blank" rel="noopener">Wikipedia</a>
+                        <a href="https://www.vogue.com/article/the-business-of-kylie-jenner" target="_blank" rel="noopener">Vogue</a>
+                        <a href="https://robinsharma.com" target="_blank" rel="noopener">RobinSharma.com</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Divine. All rights reserved. Editorial content for educational purposes.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Twitter / X">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="#" aria-label="LinkedIn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+    (function() {
+        'use strict';
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+        /* ============================================
+           PRELOADER
+           ============================================ */
+        const loader = document.getElementById('loader');
+        const loaderFill = document.getElementById('loader-fill');
+        const loaderPercent = document.getElementById('loader-percent');
+        const loaderLogo = document.querySelector('.loader-logo');
+
+        let loadProgress = 0;
+        const loadInterval = setInterval(() => {
+            loadProgress += Math.random() * 15 + 5;
+            if (loadProgress >= 100) {
+                loadProgress = 100;
+                clearInterval(loadInterval);
+                setTimeout(initPage, 400);
+            }
+            loaderFill.style.width = loadProgress + '%';
+            loaderPercent.textContent = Math.round(loadProgress) + '%';
+        }, 150);
+
+        gsap.to(loaderLogo, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.2 });
+
+        function initPage() {
+            loader.classList.add('loaded');
+            setTimeout(() => {
+                loader.style.display = 'none';
+                animateHero();
+            }, 600);
+        }
+
+        /* ============================================
+           THREE.JS SCENE
+           ============================================ */
+        let scene, camera, renderer, blob, clock;
+        const mouse = { x: 0, y: 0 };
+
+        function initThree() {
+            if (prefersReducedMotion) return;
+
+            const container = document.getElementById('canvas-container');
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.z = 5;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            container.appendChild(renderer.domElement);
+
+            clock = new THREE.Clock();
+
+            const detail = isMobile ? 3 : 4;
+            const geometry = new THREE.IcosahedronGeometry(1.8, detail);
+
+            const material = new THREE.ShaderMaterial({
+                uniforms: {
+                    uTime: { value: 0 },
+                    uMouse: { value: new THREE.Vector2(0, 0) },
+                    uColor1: { value: new THREE.Color('#E84393') },
+                    uColor2: { value: new THREE.Color('#00B894') },
+                    uColor3: { value: new THREE.Color('#6C3CE1') },
+                    uOpacity: { value: 0.55 },
+                    uNoiseScale: { value: 0.8 },
+                    uNoiseSpeed: { value: 0.3 }
+                },
+                vertexShader: `
+                    uniform float uTime;
+                    uniform vec2 uMouse;
+                    uniform float uNoiseScale;
+                    uniform float uNoiseSpeed;
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    varying float vDisplacement;
+
+                    vec3 mod289(vec3 x) { return x - floor(x * (1.0/289.0)) * 289.0; }
+                    vec4 mod289(vec4 x) { return x - floor(x * (1.0/289.0)) * 289.0; }
+                    vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+                    vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+
+                    float snoise(vec3 v) {
+                        const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+                        const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+                        vec3 i = floor(v + dot(v, C.yyy));
+                        vec3 x0 = v - i + dot(i, C.xxx);
+                        vec3 g = step(x0.yzx, x0.xyz);
+                        vec3 l = 1.0 - g;
+                        vec3 i1 = min(g.xyz, l.zxy);
+                        vec3 i2 = max(g.xyz, l.zxy);
+                        vec3 x1 = x0 - i1 + C.xxx;
+                        vec3 x2 = x0 - i2 + C.yyy;
+                        vec3 x3 = x0 - D.yyy;
+                        i = mod289(i);
+                        vec4 p = permute(permute(permute(
+                            i.z + vec4(0.0, i1.z, i2.z, 1.0))
+                            + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+                            + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+                        float n_ = 0.142857142857;
+                        vec3 ns = n_ * D.wyz - D.xzx;
+                        vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+                        vec4 x_ = floor(j * ns.z);
+                        vec4 y_ = floor(j - 7.0 * x_);
+                        vec4 x = x_ * ns.x + ns.yyyy;
+                        vec4 y = y_ * ns.x + ns.yyyy;
+                        vec4 h = 1.0 - abs(x) - abs(y);
+                        vec4 b0 = vec4(x.xy, y.xy);
+                        vec4 b1 = vec4(x.zw, y.zw);
+                        vec4 s0 = floor(b0)*2.0 + 1.0;
+                        vec4 s1 = floor(b1)*2.0 + 1.0;
+                        vec4 sh = -step(h, vec4(0.0));
+                        vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+                        vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+                        vec3 p0 = vec3(a0.xy,h.x);
+                        vec3 p1 = vec3(a0.zw,h.y);
+                        vec3 p2 = vec3(a1.xy,h.z);
+                        vec3 p3 = vec3(a1.zw,h.w);
+                        vec4 norm = taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+                        p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                        vec4 m = max(0.6 - vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)), 0.0);
+                        m = m * m;
+                        return 42.0 * dot(m*m, vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+                    }
+
+                    void main() {
+                        vNormal = normalize(normalMatrix * normal);
+                        vec3 pos = position;
+                        float noise = snoise(pos * uNoiseScale + uTime * uNoiseSpeed);
+                        float noise2 = snoise(pos * uNoiseScale * 2.0 + uTime * uNoiseSpeed * 0.5);
+                        float displacement = noise * 0.3 + noise2 * 0.1;
+                        float mouseInfluence = smoothstep(2.0, 0.0, length(pos.xy - uMouse));
+                        displacement += mouseInfluence * 0.15;
+                        pos += normal * displacement;
+                        vDisplacement = displacement;
+                        vPosition = pos;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    uniform vec3 uColor1;
+                    uniform vec3 uColor2;
+                    uniform vec3 uColor3;
+                    uniform float uOpacity;
+                    uniform float uTime;
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    varying float vDisplacement;
+
+                    void main() {
+                        vec3 viewDir = normalize(cameraPosition - vPosition);
+                        float fresnel = pow(1.0 - dot(viewDir, vNormal), 3.0);
+                        float t = vPosition.y * 0.5 + 0.5;
+                        vec3 color = mix(uColor3, uColor1, t);
+                        color = mix(color, uColor2, vDisplacement * 2.0 + 0.2);
+                        color += uColor2 * fresnel * 0.5;
+                        float alpha = uOpacity * (0.7 + fresnel * 0.3);
+                        gl_FragColor = vec4(color, alpha);
+                    }
+                `,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+
+            blob = new THREE.Mesh(geometry, material);
+            blob.position.set(2.5, 0.2, 0);
+            scene.add(blob);
+
+            const ambientLight = new THREE.AmbientLight(0xE84393, 0.3);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0x00B894, 1.5, 10);
+            pointLight.position.set(3, 3, 3);
+            scene.add(pointLight);
+
+            document.addEventListener('mousemove', (e) => {
+                mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            });
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            animateThree();
+        }
+
+        function animateThree() {
+            requestAnimationFrame(animateThree);
+            if (!blob) return;
+            const time = clock.getElapsedTime();
+            blob.material.uniforms.uTime.value = time;
+            blob.material.uniforms.uMouse.value.set(mouse.x * 2, mouse.y * 2);
+            blob.rotation.x = Math.sin(time * 0.2) * 0.15;
+            blob.rotation.y += 0.003;
+            renderer.render(scene, camera);
+        }
+
+        initThree();
+
+        /* ============================================
+           GSAP SCROLL ANIMATIONS
+           ============================================ */
+        gsap.registerPlugin(ScrollTrigger);
+
+        function animateHero() {
+            if (prefersReducedMotion) {
+                gsap.set('.hero-eyebrow, .hero-subtitle, .hero-cta-group, .hero-scroll-hint, .word-inner, .hero-vs-badge', {
+                    opacity: 1, y: 0, clearProps: 'transform'
+                });
+                return;
+            }
+
+            const tl = gsap.timeline({ delay: 0.3 });
+            tl.to('.hero-eyebrow', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+              .to('.word-inner', { y: 0, duration: 1.2, ease: 'power4.out', stagger: 0.15 }, '-=0.4')
+              .to('.hero-vs-badge', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
+              .to('.hero-subtitle', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+              .to('.hero-cta-group', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+              .to('.hero-scroll-hint', { opacity: 0.5, duration: 1, ease: 'power2.out' }, '-=0.3');
+        }
+
+        function initScrollAnimations() {
+            if (prefersReducedMotion) {
+                document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+                    el.style.opacity = 1;
+                    el.style.transform = 'none';
+                });
+                return;
+            }
+
+            // Reveal animations
+            gsap.utils.toArray('.reveal').forEach(el => {
+                gsap.to(el, {
+                    opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+                    scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
+                });
+            });
+
+            gsap.utils.toArray('.reveal-left').forEach(el => {
+                gsap.to(el, {
+                    opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+                    scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
+                });
+            });
+
+            gsap.utils.toArray('.reveal-right').forEach(el => {
+                gsap.to(el, {
+                    opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+                    scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
+                });
+            });
+
+            gsap.utils.toArray('.reveal-scale').forEach(el => {
+                gsap.to(el, {
+                    opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out',
+                    scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
+                });
+            });
+
+            // Blob scroll-linked morph
+            if (blob) {
+                gsap.to(blob.position, {
+                    x: -1.5, y: -2, z: -1,
+                    scrollTrigger: { trigger: '#kylie', start: 'top bottom', end: 'bottom top', scrub: 1.5 }
+                });
+
+                gsap.to(blob.material.uniforms.uOpacity, {
+                    value: 0.2,
+                    scrollTrigger: { trigger: '#kylie', start: 'top center', end: 'bottom top', scrub: 1 }
+                });
+
+                gsap.to(blob.material.uniforms.uOpacity, {
+                    value: 0.45,
+                    scrollTrigger: { trigger: '#robin', start: 'top center', end: 'center center', scrub: 1 }
+                });
+
+                gsap.to(blob.position, {
+                    x: 2, y: 0.5, z: -1,
+                    scrollTrigger: { trigger: '#robin', start: 'top bottom', end: 'center center', scrub: 1.5 }
+                });
+
+                gsap.to(blob.scale, {
+                    x: 2.5, y: 2.5, z: 2.5,
+                    scrollTrigger: { trigger: '#final-cta', start: 'top bottom', end: 'center center', scrub: 1.5 }
+                });
+
+                gsap.to(blob.material.uniforms.uOpacity, {
+                    value: 0.25,
+                    scrollTrigger: { trigger: '#final-cta', start: 'top center', end: 'center center', scrub: 1 }
+                });
+
+                gsap.to(blob.position, {
+                    x: 0, y: 0, z: 0,
+                    scrollTrigger: { trigger: '#final-cta', start: 'top bottom', end: 'center center', scrub: 1.5 }
+                });
+            }
+
+            // Timeline cards stagger
+            gsap.from('.tl-card', {
+                scale: 0.85, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out',
+                scrollTrigger: { trigger: '.tl-grid', start: 'top 80%', toggleActions: 'play none none reverse' }
+            });
+
+            // Empire items stagger
+            gsap.from('.empire-item', {
+                y: 40, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out',
+                scrollTrigger: { trigger: '.empires-split', start: 'top 80%', toggleActions: 'play none none reverse' }
+            });
+
+            // Final CTA background shift
+            gsap.to('.final-cta-bg', {
+                opacity: 0.5, scale: 1.5,
+                scrollTrigger: { trigger: '#final-cta', start: 'top bottom', end: 'bottom top', scrub: 1 }
+            });
+
+            // Header shrink on scroll
+            ScrollTrigger.create({
+                start: 80,
+                onUpdate: (self) => {
+                    document.getElementById('site-header').classList.toggle('scrolled', self.progress > 0);
+                }
+            });
+        }
+
+        initScrollAnimations();
+
+        /* ============================================
+           CUSTOM CURSOR
+           ============================================ */
+        if (!isMobile) {
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorRing = document.getElementById('cursor-ring');
+            let cursorX = 0, cursorY = 0;
+            let ringX = 0, ringY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                cursorX = e.clientX; cursorY = e.clientY;
+                cursorDot.style.left = cursorX + 'px';
+                cursorDot.style.top = cursorY + 'px';
+            });
+
+            function animateCursorRing() {
+                ringX += (cursorX - ringX) * 0.15;
+                ringY += (cursorY - ringY) * 0.15;
+                cursorRing.style.left = ringX + 'px';
+                cursorRing.style.top = ringY + 'px';
+                requestAnimationFrame(animateCursorRing);
+            }
+            animateCursorRing();
+
+            const hoverTargets = document.querySelectorAll('a, button, .fact-item, .tl-card, .empire-item, .impact-stat, .comparison-table tbody tr');
+            hoverTargets.forEach(target => {
+                target.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+                target.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+            });
+        }
+
+        /* ============================================
+           FULLSCREEN MENU
+           ============================================ */
+        const hamburger = document.getElementById('hamburger');
+        const fullscreenMenu = document.getElementById('fullscreen-menu');
+
+        hamburger.addEventListener('click', () => {
+            const isOpen = fullscreenMenu.classList.toggle('open');
+            hamburger.classList.toggle('active');
+            hamburger.setAttribute('aria-expanded', isOpen);
+            fullscreenMenu.setAttribute('aria-hidden', !isOpen);
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+        });
+
+        fullscreenMenu.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', () => {
+                fullscreenMenu.classList.remove('open');
+                hamburger.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                fullscreenMenu.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            });
+        });
+
+        /* ============================================
+           SMOOTH SCROLL
+           ============================================ */
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    const offset = target.getBoundingClientRect().top + window.scrollY - 80;
+                    window.scrollTo({ top: offset, behavior: 'smooth' });
+                }
+            });
+        });
+
+        /* ============================================
+           NAV ACTIVE STATE
+           ============================================ */
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a[data-nav]');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 200;
+                if (window.scrollY >= sectionTop) { current = section.getAttribute('id'); }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-nav') === current) { link.classList.add('active'); }
+            });
+        });
+
+        /* ============================================
+           TIMELINE TABS
+           ============================================ */
+        const tabKylie = document.getElementById('tab-kylie');
+        const tabRobin = document.getElementById('tab-robin');
+        const trackKylie = document.getElementById('kylie-timeline');
+        const trackRobin = document.getElementById('robin-timeline');
+
+        function switchTimeline(tab) {
+            if (tab === 'kylie') {
+                tabKylie.classList.add('active-kylie');
+                tabKylie.setAttribute('aria-pressed', 'true');
+                tabRobin.classList.remove('active-robin');
+                tabRobin.setAttribute('aria-pressed', 'false');
+                trackKylie.classList.add('active');
+                trackRobin.classList.remove('active');
+            } else {
+                tabRobin.classList.add('active-robin');
+                tabRobin.setAttribute('aria-pressed', 'true');
+                tabKylie.classList.remove('active-kylie');
+                tabKylie.setAttribute('aria-pressed', 'false');
+                trackRobin.classList.add('active');
+                trackKylie.classList.remove('active');
+            }
+            // Refresh ScrollTrigger after DOM change
+            ScrollTrigger.refresh();
+        }
+
+        tabKylie.addEventListener('click', () => switchTimeline('kylie'));
+        tabRobin.addEventListener('click', () => switchTimeline('robin'));
+
+        /* ============================================
+           FAQ / CONTROVERSIES ACCORDION
+           ============================================ */
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.closest('.faq-item');
+                const answer = item.querySelector('.faq-answer');
+                const isOpen = item.classList.contains('open');
+
+                document.querySelectorAll('.faq-item.open').forEach(openItem => {
+                    openItem.classList.remove('open');
+                    openItem.querySelector('.faq-answer').style.maxHeight = '0';
+                    openItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                });
+
+                if (!isOpen) {
+                    item.classList.add('open');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    btn.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+
+    })();
+    </script>
+</body>
+</html>
