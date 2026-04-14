@@ -1346,10 +1346,10 @@
 
         @media (max-width: 768px) {
             header {
-                background: rgba(8, 9, 16, 0.7);
-                backdrop-filter: blur(12px);
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-                padding: 1rem var(--container-pad) !important;
+                background: rgba(8, 9, 16, 0.8) !important;
+                backdrop-filter: blur(20px) !important;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 1.2rem var(--container-pad) !important;
             }
 
             .nav-links { display: none; }
@@ -1406,6 +1406,42 @@
         .reveal-left { opacity: 0; transform: translateX(-40px); }
         .reveal-right { opacity: 0; transform: translateX(40px); }
         .reveal-scale { opacity: 0; transform: scale(0.85); }
+
+        /* Profile Image Styles */
+        .profile-image-wrap {
+            position: relative;
+            width: 100%;
+            height: clamp(350px, 60vh, 700px);
+            margin: 4rem 0;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: var(--color-bg-darker);
+            border: 1px solid var(--color-glass-border);
+        }
+
+        .profile-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            filter: grayscale(20%) brightness(0.9);
+        }
+
+        .kylie-image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, var(--color-bg-darker) 10%, transparent 60%),
+                        linear-gradient(to right, rgba(232, 67, 147, 0.15), transparent);
+            z-index: 2;
+        }
+
+        .robin-image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, var(--color-bg-darker) 10%, transparent 60%),
+                        linear-gradient(to left, rgba(0, 184, 148, 0.15), transparent);
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
