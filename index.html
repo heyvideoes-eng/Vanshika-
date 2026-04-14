@@ -1424,23 +1424,37 @@
             height: 100%;
             object-fit: contain;
             object-position: center;
-            filter: brightness(0.95);
+            filter: brightness(0.85) contrast(1.1);
         }
 
         .kylie-image-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, var(--color-bg-darker) 10%, transparent 60%),
-                        linear-gradient(to right, rgba(232, 67, 147, 0.15), transparent);
+            background: linear-gradient(to top, var(--color-bg-darker) 5%, transparent 40%),
+                        linear-gradient(135deg, rgba(232, 67, 147, 0.3), transparent 70%);
             z-index: 2;
+            mix-blend-mode: screen;
+            pointer-events: none;
         }
 
         .robin-image-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, var(--color-bg-darker) 10%, transparent 60%),
-                        linear-gradient(to left, rgba(0, 184, 148, 0.15), transparent);
+            background: linear-gradient(to top, var(--color-bg-darker) 5%, transparent 40%),
+                        linear-gradient(225deg, rgba(0, 184, 148, 0.3), transparent 70%);
             z-index: 2;
+            mix-blend-mode: multiply;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .profile-image-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            box-shadow: inset 0 0 100px 30px var(--color-bg-darker);
+            z-index: 3;
+            pointer-events: none;
         }
     </style>
 </head>
